@@ -65,8 +65,8 @@ body {
 /* Bot bubble */
 .message-area .assistant {
   align-self: flex-start;
-  background: #021239;
-  color: #4b2575;
+  background: #e4e6eb;
+  color: #333;
   border-bottom-left-radius: 5px;
 }
 
