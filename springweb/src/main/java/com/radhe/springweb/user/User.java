@@ -12,10 +12,10 @@ public class User {
     @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 150)
+    @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
     @Column(name = "password_hash", nullable = false)

@@ -1,3 +1,4 @@
+//* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useCallback } from 'react';
 import { authApi } from '../api/client';
 
@@ -40,6 +41,7 @@ export function AuthProvider({ children }) {
   );
 }
 
+/* eslint-disable-next-line react-refresh/only-export-components */
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');

@@ -17,11 +17,11 @@ public class ChatMessageEntity {
     @JoinColumn(name = "session_id", nullable = false)
     private ChatSession session;
 
-    @Column(nullable = false, length = 20)
+    @Column(name = "role", nullable = false, length = 20)
     private String role; // "user" or "assistant"
 
     @Lob
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -6,7 +6,9 @@ import com.radhe.springweb.chat.dto.SendMessageRequest;
 import com.radhe.springweb.common.CurrentUserService;
 import com.radhe.springweb.user.User;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,7 +58,27 @@ public class ChatController {
     public ResponseEntity<?> sendMessage(@Valid @RequestBody SendMessageRequest request) {
         User user = currentUserService.getCurrentUser();
         try {
-            ChatService.ChatResult result = chatService.sendMessage(user, request);
+            ChatService.ChatResult result = chatService.sendMessage(user, request.getSessionId(), request.getMessage(), List.of());
+            return ResponseEntity.ok(Map.of(
+                    "sessionId", result.session().getId(),
+                    "userMessage", new ChatMessageResponse(result.userMessage()),
+                    "assistantMessage", new ChatMessageResponse(result.assistantMessage())
+            ));
+        } catch (SecurityException e) {
+            return ResponseEntity.status(403).body(Map.of("error", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @PostMapping(value = "/send", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> sendMessageWithAttachments(
+            @RequestParam(value = "sessionId", required = false) UUID sessionId,
+            @RequestParam("message") String message,
+            @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments) {
+        User user = currentUserService.getCurrentUser();
+        try {
+            ChatService.ChatResult result = chatService.sendMessage(user, sessionId, message, attachments == null ? List.of() : attachments);
             return ResponseEntity.ok(Map.of(
                     "sessionId", result.session().getId(),
                     "userMessage", new ChatMessageResponse(result.userMessage()),

@@ -1,12 +1,8 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: springweb
-
-  datasource:
-    url: ${DB_URL:jdbc:postgresql://db.buyzspyiijeywsmypkgf.supabase.co:5432/postgres}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:}
-    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
@@ -14,12 +10,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
 
   ai:
     openai:
-      api-key: ${NVIDIA_API_KEY:}
+      api-key: ${NVIDIA_API_KEY:local-dev-placeholder}
       base-url: https://integrate.api.nvidia.com
       chat:
         options:

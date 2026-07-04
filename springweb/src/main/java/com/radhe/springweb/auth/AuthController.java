@@ -70,14 +70,25 @@ public class AuthController {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalStateException("User vanished after authentication"));
 
-        // Record login history so it's directly visible in Supabase
-        String ip = httpRequest.getHeader("X-Forwarded-For") != null
-                ? httpRequest.getHeader("X-Forwarded-For")
-                : httpRequest.getRemoteAddr();
-        String userAgent = httpRequest.getHeader("User-Agent");
-        loginHistoryRepository.save(new LoginHistory(user, ip, userAgent));
+                // Record login history best-effort so authentication never fails because of auditing.
+                try {
+                        String ip = httpRequest.getHeader("X-Forwarded-For") != null
+                                        ? httpRequest.getHeader("X-Forwarded-For")
+                                        : httpRequest.getRemoteAddr();
+                        String userAgent = sanitizeUserAgent(httpRequest.getHeader("User-Agent"));
+                        loginHistoryRepository.save(new LoginHistory(user, ip, userAgent));
+                } catch (Exception ignored) {
+                        // Login should still succeed even if audit logging cannot be written.
+                }
 
         String token = jwtService.generateToken(user.getEmail());
         return ResponseEntity.ok(new AuthResponse(token, user.getId(), user.getName(), user.getEmail()));
     }
+
+        private String sanitizeUserAgent(String userAgent) {
+                if (userAgent == null) {
+                        return null;
+                }
+                return userAgent.length() > 255 ? userAgent.substring(0, 255) : userAgent;
+        }
 }

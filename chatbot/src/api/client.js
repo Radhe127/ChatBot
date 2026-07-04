@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_API_URL || '';
 
 const client = axios.create({
   baseURL: API_URL,
@@ -37,8 +37,20 @@ export const chatApi = {
   listSessions: () => client.get('/api/chat/sessions'),
   createSession: (title) => client.post('/api/chat/sessions', { title }),
   getMessages: (sessionId) => client.get(`/api/chat/sessions/${sessionId}/messages`),
-  sendMessage: (sessionId, message) =>
-    client.post('/api/chat/send', { sessionId, message }),
+  sendMessage: (sessionId, message, attachments = []) => {
+    const formData = new FormData();
+    if (sessionId) {
+      formData.append('sessionId', sessionId);
+    }
+    formData.append('message', message);
+    attachments.forEach((attachment) => {
+      formData.append('attachments', attachment);
+    });
+
+    return client.post('/api/chat/send', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 export default client;

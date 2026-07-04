@@ -1,18 +1,19 @@
 :root {
-  --bg: #0b0f14;
-  --surface: #121821;
-  --surface-2: #1a2230;
-  --border: #232d3d;
-  --text: #e6edf3;
-  --text-muted: #8b98a5;
-  --accent: #5eead4;
-  --accent-dim: #2dd4bf33;
-  --danger: #f87171;
+  --bg: #e3ddd2;
+  --surface-2: #ece7de;
+  --surface: #e8e4db;
+  --border: #cfc6b8;
+  --text: #2f2a22;
+  --text-muted: #6f675c;
+  --accent: #8a7861;
+  --accent-dim: #8a786133;
+  --danger: #c95f5f;
+  --success: #d8d1c4;
 
   font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: dark;
+  color-scheme: light;
   color: var(--text);
   background-color: var(--bg);
 

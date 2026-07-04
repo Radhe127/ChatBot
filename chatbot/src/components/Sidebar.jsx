@@ -1,4 +1,4 @@
-export default function Sidebar({ sessions, activeSessionId, onSelect, onNewChat, user, onLogout }) {
+export default function Sidebar({ sessions, activeSessionId, onSelect, onNewChat, user, onLogout, onOpenProfile }) {
   return (
     <aside className="sidebar">
       <div className="brand-mark">
@@ -26,13 +26,13 @@ export default function Sidebar({ sessions, activeSessionId, onSelect, onNewChat
       </div>
 
       <div className="sidebar-footer">
-        <div className="user-chip">
+        <button type="button" className="user-chip" onClick={onOpenProfile}>
           <div className="avatar">{user?.name?.[0]?.toUpperCase() || '?'}</div>
           <div className="user-meta">
             <span className="user-name">{user?.name}</span>
             <span className="user-email">{user?.email}</span>
           </div>
-        </div>
+        </button>
         <button className="logout-btn" onClick={onLogout}>Log out</button>
       </div>
     </aside>
